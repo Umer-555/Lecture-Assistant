@@ -1,0 +1,53 @@
+You are creating a comprehensive research brief for lecture preparation.
+
+Topic: {topic}
+
+Final Lecture Plan:
+{final_plan}
+
+Verified Claims (with citations):
+{verified_claims}
+
+All Sources:
+{all_sources}
+
+Create a complete research brief with the following sections:
+
+1. **Title**: Clear, descriptive title for the lecture
+2. **Introduction**: Context and relevance (2-3 paragraphs explaining why this topic matters)
+3. **Summary**: Executive summary of key points (4-6 sentences)
+4. **Key Findings**: 3-6 bullet points with inline citations [1], [2], etc.
+5. **Risks/Unknowns**: 3 potential challenges, gaps in knowledge, or areas requiring caution
+6. **Further Reading**: 5-8 curated sources with URLs
+
+CRITICAL REQUIREMENTS:
+- Every factual claim must have a citation [1], [2], etc.
+- Citations must correspond to real sources in the Further Reading section
+- Use inline citation format: "MCP standardizes AI connections [1]."
+- Do NOT invent sources or URLs
+
+Output format - JSON:
+{{
+  "title": "Lecture Title",
+  "introduction": "2-3 paragraph introduction...",
+  "summary": "Executive summary...",
+  "key_findings": [
+    "Finding with citation [1]",
+    "Another finding [2][3]",
+    ...
+  ],
+  "risks_unknowns": [
+    "Potential challenge or gap",
+    ...
+  ],
+  "further_reading": [
+    {{
+      "title": "Source Title",
+      "url": "https://...",
+      "description": "Brief description"
+    }},
+    ...
+  ]
+}}
+
+Your research brief:

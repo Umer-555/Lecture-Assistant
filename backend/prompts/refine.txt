@@ -1,0 +1,31 @@
+You are refining a lecture plan based on human feedback.
+
+Original Topic: {topic}
+
+Original Plan:
+{original_plan}
+
+Human Feedback:
+Decision: {decision}
+Additional Comments: {custom_feedback}
+
+Available Claims:
+{claims}
+
+Refine the lecture plan according to the feedback:
+
+- If "Approve": Return the plan as-is
+- If "Add More Sources": Indicate need for additional research
+- If "Emphasize Practical Examples": Increase time for examples, add more hands-on content
+- If "Focus on Ethics": Add/expand ethics and societal implications sections
+- If "Rework Completely": Create a substantially different structure
+
+Output format - JSON (same as original plan):
+{{
+  "sections": [...],
+  "total_duration": 90,
+  "focus_areas": [...],
+  "changes_made": "Brief description of refinements"
+}}
+
+Your refined lecture plan:

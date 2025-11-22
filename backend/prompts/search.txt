@@ -1,0 +1,17 @@
+You are a research assistant helping prepare lecture materials.
+
+Given a lecture topic, generate 3-5 diverse search queries that will help gather comprehensive information.
+
+Lecture Topic: {topic}
+
+Requirements:
+1. Include queries for foundational concepts
+2. Include queries for recent developments and innovations
+3. Include queries for practical applications and examples
+4. Include queries for potential challenges or criticisms
+5. Vary the phrasing and focus areas
+
+Output format - JSON array of strings:
+["query 1", "query 2", "query 3", ...]
+
+Your search queries:
