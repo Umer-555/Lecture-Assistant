@@ -4,6 +4,7 @@ Defines the graph structure with nodes and edges
 """
 
 from langgraph.graph import StateGraph, END
+from langgraph.checkpoint.memory import MemorySaver
 from backend.graph.state import ResearchState
 from backend.graph import nodes
 
@@ -110,8 +111,10 @@ def create_workflow() -> StateGraph:
     # Final brief is the end
     workflow.add_edge("generate_brief", END)
 
-    # Compile the graph
-    compiled_graph = workflow.compile()
+    # Compile the graph with checkpointer for HITL support
+    # MemorySaver allows the graph to save state and resume from checkpoints
+    memory = MemorySaver()
+    compiled_graph = workflow.compile(checkpointer=memory)
 
     return compiled_graph
 

@@ -82,15 +82,21 @@ def run_graph_until_checkpoint(research_id: str):
 
     This function executes the graph step by step and stops when
     status becomes "awaiting_human"
+
+    Uses thread_id config to enable checkpointer to track and resume execution
     """
     state = research_sessions.get(research_id)
     if not state:
         return
 
     try:
+        # Create config with thread_id for checkpointer
+        # This allows LangGraph to track execution state and resume from checkpoints
+        config = {"configurable": {"thread_id": research_id}}
+
         # Stream through the graph node by node
         # This allows us to check for checkpoints after each node
-        for event in graph.stream(state):
+        for event in graph.stream(state, config):
             # Update state after each node execution
             if event:
                 # Extract the state from the event
