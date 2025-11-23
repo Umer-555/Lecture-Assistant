@@ -94,9 +94,23 @@ def run_graph_until_checkpoint(research_id: str):
         # This allows LangGraph to track execution state and resume from checkpoints
         config = {"configurable": {"thread_id": research_id}}
 
+        # Determine if we're resuming from a checkpoint or starting fresh
+        is_resuming = state.get("_needs_resume", False)
+        if is_resuming:
+            # Remove the flag and update state
+            state.pop("_needs_resume", None)
+            research_sessions[research_id] = state
+
+            # CRITICAL: When resuming from checkpoint, pass None to continue from saved state
+            # Passing the state would restart from the beginning!
+            stream_input = None
+        else:
+            # First run - pass the initial state
+            stream_input = state
+
         # Stream through the graph node by node
         # This allows us to check for checkpoints after each node
-        for event in graph.stream(state, config):
+        for event in graph.stream(stream_input, config):
             # Update state after each node execution
             if event:
                 # Extract the state from the event
@@ -279,10 +293,18 @@ def respond_to_checkpoint(
             elif i in (response.rejected_claims or []):
                 claim["verified"] = False
 
-    # Clear checkpoint and resume execution
+    # Clear checkpoint status
     state["current_checkpoint"] = None
     state["status"] = "running"
     state.pop("_checkpoint_id", None)
+
+    # Update the checkpoint state in LangGraph's checkpointer
+    # This is CRITICAL: We need to update the saved checkpoint with our changes
+    config = {"configurable": {"thread_id": research_id}}
+    graph.update_state(config, state)
+
+    # Mark for resume
+    state["_needs_resume"] = True
 
     # Update session
     research_sessions[research_id] = state
