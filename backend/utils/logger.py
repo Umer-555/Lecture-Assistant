@@ -26,7 +26,7 @@ class NodeLogger:
         inputs: Dict[str, Any],
         output: Any,
         prompt_used: Optional[str] = None,
-        model: str = "claude-sonnet-4-20250514",
+        model: str = "n/a",  # Changed from hardcoded Claude model
         temperature: float = 0.7,
         human_decision: Optional[str] = None,
         duration_ms: Optional[float] = None
