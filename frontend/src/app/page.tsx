@@ -180,14 +180,20 @@ export default function Home() {
       )}
 
       {stage === 'researching' && (
-        <div style={styles.loadingContainer}>
-          <div style={styles.spinner}></div>
-          <h2 style={styles.loadingTitle}>⟳ Research in Progress</h2>
-          <p style={styles.loadingText}>{statusMessage}</p>
-          <div style={styles.progressBar}>
-            <div style={styles.progressFill}></div>
+        <div style={styles.loadingPage}>
+          <div style={styles.gradientBackground}></div>
+          <div style={styles.loadingGlassCard}>
+            <div style={styles.spinnerWrapper}>
+              <div style={styles.spinner}></div>
+              <div style={styles.spinnerGlow}></div>
+            </div>
+            <h2 style={styles.loadingTitle}>Research in Progress</h2>
+            <p style={styles.loadingText}>{statusMessage}</p>
+            <div style={styles.progressBar}>
+              <div style={styles.progressFill}></div>
+            </div>
+            <p style={styles.hint}>The workflow will pause at checkpoints for your review</p>
           </div>
-          <p style={styles.hint}>This may take 30-60 seconds. The graph will pause for your review.</p>
         </div>
       )}
 
@@ -208,10 +214,19 @@ export default function Home() {
       )}
 
       {stage === 'generating' && (
-        <div style={styles.loadingContainer}>
-          <div style={styles.spinner}></div>
-          <h2 style={styles.loadingTitle}>✎ Generating Final Brief</h2>
-          <p style={styles.loadingText}>{statusMessage}</p>
+        <div style={styles.loadingPage}>
+          <div style={styles.gradientBackground}></div>
+          <div style={styles.loadingGlassCard}>
+            <div style={styles.spinnerWrapper}>
+              <div style={styles.spinner}></div>
+              <div style={styles.spinnerGlow}></div>
+            </div>
+            <h2 style={styles.loadingTitle}>Generating Final Brief</h2>
+            <p style={styles.loadingText}>{statusMessage}</p>
+            <div style={styles.progressBar}>
+              <div style={styles.progressFill}></div>
+            </div>
+          </div>
         </div>
       )}
 
@@ -247,52 +262,105 @@ const styles: { [key: string]: React.CSSProperties } = {
     backgroundColor: '#f5f5f5',
     padding: '20px',
   },
-  loadingContainer: {
-    maxWidth: '600px',
-    margin: '100px auto',
+  loadingPage: {
+    minHeight: '100vh',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    overflow: 'hidden',
+  },
+  gradientBackground: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: 'linear-gradient(135deg, #4CAF50 0%, #2196F3 50%, #4CAF50 100%)',
+    backgroundSize: '200% 200%',
+    animation: 'gradientShift 15s ease infinite',
+    zIndex: -1,
+  },
+  loadingGlassCard: {
+    maxWidth: '500px',
+    width: '100%',
+    margin: '20px',
+    background: 'rgba(255, 255, 255, 0.95)',
+    backdropFilter: 'blur(20px)',
+    borderRadius: '24px',
+    padding: '50px 40px',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.5) inset',
+    border: '1px solid rgba(255, 255, 255, 0.3)',
     textAlign: 'center',
-    padding: '40px',
-    backgroundColor: 'white',
-    borderRadius: '12px',
-    boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+    position: 'relative',
+    zIndex: 1,
+  },
+  spinnerWrapper: {
+    position: 'relative',
+    display: 'inline-block',
+    marginBottom: '30px',
   },
   spinner: {
-    width: '60px',
-    height: '60px',
-    border: '6px solid #f3f3f3',
-    borderTop: '6px solid #4CAF50',
+    width: '70px',
+    height: '70px',
+    border: '5px solid rgba(76, 175, 80, 0.1)',
+    borderTop: '5px solid #4CAF50',
     borderRadius: '50%',
-    margin: '0 auto 20px',
     animation: 'spin 1s linear infinite',
+    position: 'relative',
+    zIndex: 2,
+  },
+  spinnerGlow: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '90px',
+    height: '90px',
+    background: 'radial-gradient(circle, rgba(76, 175, 80, 0.3) 0%, transparent 70%)',
+    borderRadius: '50%',
+    animation: 'pulse 2s ease-in-out infinite',
+    zIndex: 1,
   },
   loadingTitle: {
-    fontSize: '1.8rem',
+    fontSize: '2rem',
     marginBottom: '15px',
-    color: '#333',
+    background: 'linear-gradient(135deg, #4CAF50 0%, #2196F3 100%)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    backgroundClip: 'text',
+    fontWeight: '700',
+    letterSpacing: '-0.5px',
   },
   loadingText: {
-    fontSize: '1.1rem',
-    color: '#666',
-    marginBottom: '20px',
+    fontSize: '1.05rem',
+    color: '#555',
+    marginBottom: '30px',
+    fontWeight: '400',
   },
   progressBar: {
     width: '100%',
-    height: '8px',
-    backgroundColor: '#e0e0e0',
-    borderRadius: '4px',
+    height: '6px',
+    backgroundColor: 'rgba(76, 175, 80, 0.15)',
+    borderRadius: '3px',
     overflow: 'hidden',
-    marginBottom: '15px',
+    marginBottom: '20px',
   },
   progressFill: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#4CAF50',
+    background: 'linear-gradient(90deg, #4CAF50, #2196F3)',
     animation: 'progress 2s ease-in-out infinite',
+    borderRadius: '3px',
   },
   hint: {
-    fontSize: '0.9rem',
-    color: '#999',
-    fontStyle: 'italic',
+    fontSize: '0.95rem',
+    color: '#777',
+    fontWeight: '400',
   },
   errorContainer: {
     maxWidth: '600px',
