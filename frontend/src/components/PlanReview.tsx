@@ -30,10 +30,10 @@ export default function PlanReview({ draftPlan, topic, onDecision }: PlanReviewP
 
   const decisions = [
     { value: 'approve', label: '✓ Approve', color: '#4CAF50' },
-    { value: 'add_more_sources', label: '+ Add More Sources', color: '#2196F3' },
-    { value: 'emphasize_practical', label: '🛠️ Emphasize Practical Examples', color: '#FF9800' },
+    { value: 'emphasize_practical', label: '⚡ Emphasize Practical Examples', color: '#FF9800' },
     { value: 'focus_ethics', label: '⚖️ Focus on Ethics', color: '#9C27B0' },
-    { value: 'rework_completely', label: '🔄 Rework Completely', color: '#f44336' },
+    { value: 'restructure', label: '↻ Restructure Plan', color: '#2196F3' },
+    { value: 'rework_completely', label: '⟲ Rework Completely', color: '#f44336' },
   ];
 
   const handleSubmit = () => {

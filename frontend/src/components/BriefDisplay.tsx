@@ -45,11 +45,11 @@ export default function BriefDisplay({ brief, onDownload, onNewResearch }: Brief
         <h1 style={styles.title}>{brief.title}</h1>
         <div style={styles.buttonGroup}>
           <button onClick={downloadBrief} style={styles.downloadButton}>
-            📥 Download Brief
+            ⇓ Download Brief
           </button>
           {onNewResearch && (
             <button onClick={onNewResearch} style={styles.newButton}>
-              🔄 New Research
+              ⟴ New Research
             </button>
           )}
         </div>

@@ -100,7 +100,9 @@ def create_workflow() -> StateGraph:
     # This is handled by the API - graph execution stops here
     workflow.add_edge("synthesis", "refinement")
 
-    # After refinement, go to fact verification checkpoint
+    # After refinement, check if plan needs reapproval
+    # If refinement modified the plan, it sets status back to "awaiting_human"
+    # The graph will stop and wait for human to approve the refined plan
     workflow.add_edge("refinement", "fact_verification")
 
     # After fact verification, generate final brief

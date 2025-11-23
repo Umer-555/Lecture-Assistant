@@ -411,13 +411,19 @@ def refinement_node(state: ResearchState) -> ResearchState:
 
         state["refined_plan"] = refined_plan
 
+        # CRITICAL: If plan was modified, we need human to approve the NEW plan
+        # Set checkpoint again to show the refined plan
+        state["draft_plan"] = refined_plan  # Update draft with refined version
+        state["status"] = "awaiting_human"
+        state["current_checkpoint"] = "plan_review"
+
         # Log execution
         duration = (time.time() - start_time) * 1000
         model_info = get_llm_service().get_model_info(creative=True)
         logger.log_node_execution(
             node_name="refinement",
             inputs={"decision": decision},
-            output={"refined": True},
+            output={"refined": True, "requires_reapproval": True},
             prompt_used=prompt if decision != "approve" else None,
             model=model_info["model"],
             temperature=model_info["temperature"],

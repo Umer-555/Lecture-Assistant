@@ -172,7 +172,7 @@ export default function Home() {
           {hasSavedResearch && (
             <div style={styles.savedResearchContainer}>
               <button onClick={handleViewLastResearch} style={styles.viewLastButton}>
-                📄 View Last Research
+                ◂ View Last Research
               </button>
             </div>
           )}
@@ -182,7 +182,7 @@ export default function Home() {
       {stage === 'researching' && (
         <div style={styles.loadingContainer}>
           <div style={styles.spinner}></div>
-          <h2 style={styles.loadingTitle}>🔬 Research in Progress</h2>
+          <h2 style={styles.loadingTitle}>⟳ Research in Progress</h2>
           <p style={styles.loadingText}>{statusMessage}</p>
           <div style={styles.progressBar}>
             <div style={styles.progressFill}></div>
@@ -210,7 +210,7 @@ export default function Home() {
       {stage === 'generating' && (
         <div style={styles.loadingContainer}>
           <div style={styles.spinner}></div>
-          <h2 style={styles.loadingTitle}>📝 Generating Final Brief</h2>
+          <h2 style={styles.loadingTitle}>✎ Generating Final Brief</h2>
           <p style={styles.loadingText}>{statusMessage}</p>
         </div>
       )}
