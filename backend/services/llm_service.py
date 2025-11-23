@@ -25,17 +25,17 @@ class LLMService:
         anthropic_key = os.getenv("ANTHROPIC_API_KEY")
 
         if openai_key and OPENAI_AVAILABLE:
-            # Use OpenAI GPT-4
-            print("✓ Using OpenAI GPT-4")
+            # Use OpenAI GPT-4o (cheaper and faster than GPT-4)
+            print("✓ Using OpenAI GPT-4o")
             self.provider = "openai"
             self.creative_llm = ChatOpenAI(
-                model="gpt-4",
+                model="gpt-4o",
                 temperature=0.7,
                 max_tokens=4096,
                 openai_api_key=openai_key
             )
             self.factual_llm = ChatOpenAI(
-                model="gpt-4",
+                model="gpt-4o",
                 temperature=0.3,
                 max_tokens=4096,
                 openai_api_key=openai_key
