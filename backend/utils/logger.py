@@ -17,7 +17,8 @@ class NodeLogger:
         self.logs_dir = Path("logs")
         self.logs_dir.mkdir(exist_ok=True)
         self.log_file = self.logs_dir / f"{research_id}.json"
-        self.logs = []
+        # Load existing logs instead of starting empty
+        self.logs = self._load_existing_logs()
 
     def log_node_execution(
         self,
@@ -61,6 +62,18 @@ class NodeLogger:
     def get_logs(self):
         """Get all logs for this research session"""
         return self.logs
+
+    def _load_existing_logs(self):
+        """Load existing logs from file, or return empty list"""
+        if self.log_file.exists():
+            try:
+                with open(self.log_file, 'r') as f:
+                    data = json.load(f)
+                    return data.get("logs", [])
+            except Exception as e:
+                print(f"Error loading logs: {str(e)}")
+                return []
+        return []
 
     def _save_logs(self):
         """Save logs to file"""
