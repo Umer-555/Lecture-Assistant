@@ -109,8 +109,12 @@ class LLMService:
             Dictionary with model info
         """
         llm = self.creative_llm if creative else self.factual_llm
+
+        # ChatOpenAI uses model_name, ChatAnthropic uses model
+        model = getattr(llm, 'model_name', None) or getattr(llm, 'model', 'unknown')
+
         return {
-            "model": llm.model,
+            "model": model,
             "temperature": llm.temperature,
             "max_tokens": llm.max_tokens
         }
