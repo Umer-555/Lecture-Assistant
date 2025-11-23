@@ -47,6 +47,10 @@ export default function PlanReview({ draftPlan, topic, onDecision }: PlanReviewP
       {/* Animated gradient background */}
       <div style={styles.gradientBackground}></div>
 
+      {/* Floating particles */}
+      <div style={styles.particle1}></div>
+      <div style={styles.particle2}></div>
+
       <div style={styles.container}>
         <div style={styles.headerCard}>
           <h2 style={styles.title}>Review Draft Lecture Plan</h2>
@@ -146,6 +150,28 @@ const styles: { [key: string]: React.CSSProperties } = {
     animation: 'gradientShift 15s ease infinite',
     zIndex: -1,
   },
+  particle1: {
+    position: 'fixed',
+    width: '350px',
+    height: '350px',
+    borderRadius: '50%',
+    background: 'radial-gradient(circle, rgba(76, 175, 80, 0.12) 0%, transparent 70%)',
+    top: '20%',
+    right: '10%',
+    animation: 'float 22s ease-in-out infinite',
+    zIndex: -1,
+  },
+  particle2: {
+    position: 'fixed',
+    width: '280px',
+    height: '280px',
+    borderRadius: '50%',
+    background: 'radial-gradient(circle, rgba(33, 150, 243, 0.1) 0%, transparent 70%)',
+    bottom: '15%',
+    left: '8%',
+    animation: 'float 20s ease-in-out infinite reverse',
+    zIndex: -1,
+  },
   container: {
     maxWidth: '900px',
     margin: '0 auto',
@@ -154,7 +180,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     zIndex: 1,
   },
   headerCard: {
-    background: 'rgba(255, 255, 255, 0.95)',
+    background: 'rgba(255, 255, 255, 0.85)',
     backdropFilter: 'blur(20px)',
     borderRadius: '20px',
     padding: '40px',
@@ -186,7 +212,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     fontWeight: '500',
   },
   planCard: {
-    background: 'rgba(255, 255, 255, 0.95)',
+    background: 'rgba(255, 255, 255, 0.85)',
     backdropFilter: 'blur(20px)',
     borderRadius: '20px',
     padding: '30px',
@@ -237,7 +263,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     border: '1px solid rgba(76, 175, 80, 0.2)',
   },
   decisionCard: {
-    background: 'rgba(255, 255, 255, 0.95)',
+    background: 'rgba(255, 255, 255, 0.85)',
     backdropFilter: 'blur(20px)',
     borderRadius: '20px',
     padding: '30px',

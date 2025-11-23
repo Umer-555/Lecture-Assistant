@@ -44,6 +44,10 @@ export default function BriefDisplay({ brief, onDownload, onNewResearch }: Brief
       {/* Animated gradient background */}
       <div style={styles.gradientBackground}></div>
 
+      {/* Floating particles */}
+      <div style={styles.particle1}></div>
+      <div style={styles.particle2}></div>
+
       <div style={styles.container}>
         <div style={styles.header}>
           <h1 style={styles.title}>{brief.title}</h1>
@@ -164,6 +168,28 @@ const styles: { [key: string]: React.CSSProperties } = {
     animation: 'gradientShift 15s ease infinite',
     zIndex: -1,
   },
+  particle1: {
+    position: 'fixed',
+    width: '340px',
+    height: '340px',
+    borderRadius: '50%',
+    background: 'radial-gradient(circle, rgba(76, 175, 80, 0.12) 0%, transparent 70%)',
+    top: '10%',
+    right: '5%',
+    animation: 'float 26s ease-in-out infinite',
+    zIndex: -1,
+  },
+  particle2: {
+    position: 'fixed',
+    width: '300px',
+    height: '300px',
+    borderRadius: '50%',
+    background: 'radial-gradient(circle, rgba(33, 150, 243, 0.1) 0%, transparent 70%)',
+    bottom: '20%',
+    left: '10%',
+    animation: 'float 21s ease-in-out infinite reverse',
+    zIndex: -1,
+  },
   container: {
     maxWidth: '900px',
     margin: '0 auto',
@@ -172,7 +198,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     zIndex: 1,
   },
   header: {
-    background: 'rgba(255, 255, 255, 0.95)',
+    background: 'rgba(255, 255, 255, 0.85)',
     backdropFilter: 'blur(20px)',
     borderRadius: '20px',
     padding: '40px',
@@ -229,7 +255,7 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
   section: {
     marginBottom: '20px',
-    background: 'rgba(255, 255, 255, 0.95)',
+    background: 'rgba(255, 255, 255, 0.85)',
     backdropFilter: 'blur(20px)',
     borderRadius: '20px',
     padding: '30px',

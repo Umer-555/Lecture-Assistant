@@ -54,6 +54,10 @@ export default function FactVerification({ claims, topic, onVerify }: FactVerifi
       {/* Animated gradient background */}
       <div style={styles.gradientBackground}></div>
 
+      {/* Floating particles */}
+      <div style={styles.particle1}></div>
+      <div style={styles.particle2}></div>
+
       <div style={styles.container}>
         <div style={styles.headerCard}>
           <h2 style={styles.title}>Verify Key Claims</h2>
@@ -172,6 +176,28 @@ const styles: { [key: string]: React.CSSProperties } = {
     animation: 'gradientShift 15s ease infinite',
     zIndex: -1,
   },
+  particle1: {
+    position: 'fixed',
+    width: '320px',
+    height: '320px',
+    borderRadius: '50%',
+    background: 'radial-gradient(circle, rgba(76, 175, 80, 0.12) 0%, transparent 70%)',
+    top: '15%',
+    left: '5%',
+    animation: 'float 24s ease-in-out infinite',
+    zIndex: -1,
+  },
+  particle2: {
+    position: 'fixed',
+    width: '280px',
+    height: '280px',
+    borderRadius: '50%',
+    background: 'radial-gradient(circle, rgba(33, 150, 243, 0.1) 0%, transparent 70%)',
+    bottom: '10%',
+    right: '5%',
+    animation: 'float 19s ease-in-out infinite reverse',
+    zIndex: -1,
+  },
   container: {
     maxWidth: '900px',
     margin: '0 auto',
@@ -180,7 +206,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     zIndex: 1,
   },
   headerCard: {
-    background: 'rgba(255, 255, 255, 0.95)',
+    background: 'rgba(255, 255, 255, 0.85)',
     backdropFilter: 'blur(20px)',
     borderRadius: '20px',
     padding: '40px',
@@ -221,7 +247,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     gap: '20px',
     marginBottom: '20px',
     padding: '20px',
-    background: 'rgba(255, 255, 255, 0.95)',
+    background: 'rgba(255, 255, 255, 0.85)',
     backdropFilter: 'blur(20px)',
     borderRadius: '16px',
     boxShadow: '0 4px 16px rgba(0, 0, 0, 0.08)',
@@ -243,7 +269,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     marginBottom: '20px',
   },
   claimCard: {
-    background: 'rgba(255, 255, 255, 0.95)',
+    background: 'rgba(255, 255, 255, 0.85)',
     backdropFilter: 'blur(20px)',
     border: '1px solid rgba(255, 255, 255, 0.3)',
     borderRadius: '16px',
