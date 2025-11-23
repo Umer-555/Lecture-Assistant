@@ -235,12 +235,16 @@ export default function Home() {
       )}
 
       {stage === 'error' && (
-        <div style={styles.errorContainer}>
-          <h2 style={styles.errorTitle}>⚠️ Error</h2>
-          <p style={styles.errorText}>{error}</p>
-          <button onClick={handleNewResearch} style={styles.retryButton}>
-            Try Again
-          </button>
+        <div style={styles.loadingPage}>
+          <div style={styles.gradientBackground}></div>
+          <div style={styles.errorCard}>
+            <div style={styles.errorIcon}>⚠️</div>
+            <h2 style={styles.errorTitle}>Something Went Wrong</h2>
+            <p style={styles.errorText}>{error}</p>
+            <button onClick={handleNewResearch} style={styles.retryButton}>
+              Try Again →
+            </button>
+          </div>
         </div>
       )}
     </div>
@@ -362,35 +366,48 @@ const styles: { [key: string]: React.CSSProperties } = {
     color: '#777',
     fontWeight: '400',
   },
-  errorContainer: {
-    maxWidth: '600px',
-    margin: '100px auto',
+  errorCard: {
+    maxWidth: '500px',
+    width: '100%',
+    margin: '20px',
+    background: 'rgba(255, 255, 255, 0.95)',
+    backdropFilter: 'blur(20px)',
+    borderRadius: '24px',
+    padding: '50px 40px',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.5) inset',
+    border: '1px solid rgba(255, 255, 255, 0.3)',
     textAlign: 'center',
-    padding: '40px',
-    backgroundColor: 'white',
-    borderRadius: '12px',
-    boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-    border: '2px solid #f44336',
+    position: 'relative',
+    zIndex: 1,
+  },
+  errorIcon: {
+    fontSize: '4rem',
+    marginBottom: '20px',
+    animation: 'pulse 2s ease-in-out infinite',
   },
   errorTitle: {
-    fontSize: '1.8rem',
+    fontSize: '2rem',
     marginBottom: '15px',
     color: '#f44336',
+    fontWeight: '700',
   },
   errorText: {
-    fontSize: '1.1rem',
-    color: '#666',
-    marginBottom: '20px',
+    fontSize: '1.05rem',
+    color: '#555',
+    marginBottom: '30px',
+    lineHeight: '1.6',
   },
   retryButton: {
-    padding: '12px 24px',
+    padding: '14px 28px',
     fontSize: '1.1rem',
-    fontWeight: 'bold',
+    fontWeight: '600',
     color: 'white',
-    backgroundColor: '#4CAF50',
+    background: 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)',
     border: 'none',
-    borderRadius: '6px',
+    borderRadius: '12px',
     cursor: 'pointer',
+    transition: 'all 0.3s ease',
+    boxShadow: '0 4px 15px rgba(76, 175, 80, 0.3)',
   },
   savedResearchContainer: {
     maxWidth: '600px',

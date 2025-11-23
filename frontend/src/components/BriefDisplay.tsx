@@ -40,9 +40,14 @@ export default function BriefDisplay({ brief, onDownload, onNewResearch }: Brief
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.header}>
-        <h1 style={styles.title}>{brief.title}</h1>
+    <div style={styles.pageContainer}>
+      {/* Animated gradient background */}
+      <div style={styles.gradientBackground}></div>
+
+      <div style={styles.container}>
+        <div style={styles.header}>
+          <h1 style={styles.title}>{brief.title}</h1>
+          <div style={styles.titleAccent}></div>
         <div style={styles.buttonGroup}>
           <button onClick={downloadBrief} style={styles.downloadButton}>
             ⇓ Download Brief
@@ -117,6 +122,7 @@ export default function BriefDisplay({ brief, onDownload, onNewResearch }: Brief
           </details>
         </div>
       )}
+      </div>
     </div>
   );
 }
@@ -141,59 +147,102 @@ function formatBriefAsText(brief: Brief): string {
 }
 
 const styles: { [key: string]: React.CSSProperties } = {
+  pageContainer: {
+    minHeight: '100vh',
+    position: 'relative',
+    overflow: 'auto',
+    paddingBottom: '40px',
+  },
+  gradientBackground: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: 'linear-gradient(135deg, #4CAF50 0%, #2196F3 50%, #4CAF50 100%)',
+    backgroundSize: '200% 200%',
+    animation: 'gradientShift 15s ease infinite',
+    zIndex: -1,
+  },
   container: {
     maxWidth: '900px',
     margin: '0 auto',
-    padding: '20px',
-    backgroundColor: 'white',
+    padding: '40px 20px',
+    position: 'relative',
+    zIndex: 1,
   },
   header: {
-    marginBottom: '30px',
-    borderBottom: '3px solid #4CAF50',
-    paddingBottom: '20px',
+    background: 'rgba(255, 255, 255, 0.95)',
+    backdropFilter: 'blur(20px)',
+    borderRadius: '20px',
+    padding: '40px',
+    marginBottom: '20px',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+    border: '1px solid rgba(255, 255, 255, 0.3)',
+    textAlign: 'center',
   },
   title: {
-    fontSize: '2.5rem',
-    fontWeight: 'bold',
-    marginBottom: '20px',
-    color: '#1a1a1a',
+    fontSize: '2.8rem',
+    fontWeight: '700',
+    marginBottom: '15px',
+    background: 'linear-gradient(135deg, #4CAF50 0%, #2196F3 100%)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    backgroundClip: 'text',
+    letterSpacing: '-0.5px',
+  },
+  titleAccent: {
+    width: '100px',
+    height: '4px',
+    background: 'linear-gradient(90deg, #4CAF50, #2196F3)',
+    margin: '0 auto 30px',
+    borderRadius: '2px',
   },
   buttonGroup: {
     display: 'flex',
-    gap: '10px',
+    gap: '12px',
+    justifyContent: 'center',
   },
   downloadButton: {
-    padding: '12px 24px',
+    padding: '14px 28px',
     fontSize: '1rem',
-    fontWeight: 'bold',
+    fontWeight: '600',
     color: 'white',
-    backgroundColor: '#4CAF50',
+    background: 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)',
     border: 'none',
-    borderRadius: '6px',
+    borderRadius: '12px',
     cursor: 'pointer',
-    transition: 'background-color 0.3s',
+    transition: 'all 0.3s ease',
+    boxShadow: '0 4px 15px rgba(76, 175, 80, 0.3)',
   },
   newButton: {
-    padding: '12px 24px',
+    padding: '14px 28px',
     fontSize: '1rem',
-    fontWeight: 'bold',
+    fontWeight: '600',
     color: '#4CAF50',
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     border: '2px solid #4CAF50',
-    borderRadius: '6px',
+    borderRadius: '12px',
     cursor: 'pointer',
-    transition: 'all 0.3s',
+    transition: 'all 0.3s ease',
+    boxShadow: '0 2px 8px rgba(76, 175, 80, 0.2)',
   },
   section: {
-    marginBottom: '30px',
+    marginBottom: '20px',
+    background: 'rgba(255, 255, 255, 0.95)',
+    backdropFilter: 'blur(20px)',
+    borderRadius: '20px',
+    padding: '30px',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+    border: '1px solid rgba(255, 255, 255, 0.3)',
   },
   sectionTitle: {
     fontSize: '1.8rem',
-    fontWeight: 'bold',
-    marginBottom: '15px',
-    color: '#333',
-    borderBottom: '2px solid #eee',
-    paddingBottom: '10px',
+    fontWeight: '600',
+    marginBottom: '20px',
+    color: '#2c3e50',
+    paddingBottom: '12px',
+    borderBottom: '2px solid rgba(76, 175, 80, 0.2)',
   },
   text: {
     fontSize: '1.1rem',
@@ -214,11 +263,12 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
   sourceCard: {
     display: 'flex',
-    marginBottom: '20px',
-    padding: '15px',
-    backgroundColor: '#f9f9f9',
-    borderRadius: '8px',
-    border: '1px solid #ddd',
+    marginBottom: '16px',
+    padding: '20px',
+    background: 'linear-gradient(135deg, rgba(76, 175, 80, 0.05), rgba(33, 150, 243, 0.05))',
+    borderRadius: '12px',
+    border: '1px solid rgba(76, 175, 80, 0.2)',
+    transition: 'all 0.3s ease',
   },
   sourceNumber: {
     fontSize: '1.2rem',
@@ -250,15 +300,16 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
   appendixSummary: {
     fontSize: '1.2rem',
-    fontWeight: 'bold',
+    fontWeight: '600',
     cursor: 'pointer',
-    color: '#666',
+    color: '#555',
     marginBottom: '10px',
   },
   appendix: {
     marginTop: '15px',
-    padding: '15px',
-    backgroundColor: '#f5f5f5',
-    borderRadius: '6px',
+    padding: '20px',
+    background: 'linear-gradient(135deg, rgba(76, 175, 80, 0.05), rgba(33, 150, 243, 0.05))',
+    borderRadius: '12px',
+    border: '1px solid rgba(76, 175, 80, 0.15)',
   },
 };
