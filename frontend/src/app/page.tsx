@@ -22,6 +22,13 @@ export default function Home() {
   const [brief, setBrief] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [statusMessage, setStatusMessage] = useState<string>('');
+  const [hasSavedResearch, setHasSavedResearch] = useState<boolean>(false);
+
+  // Check for saved research on mount
+  useEffect(() => {
+    const savedResearch = localStorage.getItem('lastResearch');
+    setHasSavedResearch(!!savedResearch);
+  }, []);
 
   // Poll for status updates
   useEffect(() => {
@@ -122,6 +129,17 @@ export default function Home() {
   };
 
   const handleNewResearch = () => {
+    // Save current research to localStorage if completed
+    if (stage === 'completed' && brief && researchId) {
+      localStorage.setItem('lastResearch', JSON.stringify({
+        researchId,
+        topic,
+        brief,
+        timestamp: new Date().toISOString()
+      }));
+      setHasSavedResearch(true);
+    }
+
     setStage('input');
     setResearchId(null);
     setTopic('');
@@ -131,10 +149,34 @@ export default function Home() {
     setStatusMessage('');
   };
 
+  const handleViewLastResearch = () => {
+    const savedData = localStorage.getItem('lastResearch');
+    if (savedData) {
+      try {
+        const { researchId: savedId, topic: savedTopic, brief: savedBrief } = JSON.parse(savedData);
+        setResearchId(savedId);
+        setTopic(savedTopic);
+        setBrief(savedBrief);
+        setStage('completed');
+      } catch (err) {
+        console.error('Failed to load saved research:', err);
+      }
+    }
+  };
+
   return (
     <div style={styles.container}>
       {stage === 'input' && (
-        <ResearchInput onStartResearch={handleStartResearch} isLoading={false} />
+        <>
+          <ResearchInput onStartResearch={handleStartResearch} isLoading={false} />
+          {hasSavedResearch && (
+            <div style={styles.savedResearchContainer}>
+              <button onClick={handleViewLastResearch} style={styles.viewLastButton}>
+                📄 View Last Research
+              </button>
+            </div>
+          )}
+        </>
       )}
 
       {stage === 'researching' && (
@@ -281,5 +323,21 @@ const styles: { [key: string]: React.CSSProperties } = {
     border: 'none',
     borderRadius: '6px',
     cursor: 'pointer',
+  },
+  savedResearchContainer: {
+    maxWidth: '600px',
+    margin: '20px auto',
+    textAlign: 'center',
+  },
+  viewLastButton: {
+    padding: '12px 24px',
+    fontSize: '1rem',
+    fontWeight: 'bold',
+    color: 'white',
+    backgroundColor: '#2196F3',
+    border: 'none',
+    borderRadius: '6px',
+    cursor: 'pointer',
+    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
   },
 };

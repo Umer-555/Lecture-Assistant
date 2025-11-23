@@ -88,18 +88,33 @@ def run_graph_until_checkpoint(research_id: str):
         return
 
     try:
-        # Run the graph
-        # The graph will execute until a node sets status to "awaiting_human"
-        result = graph.invoke(state)
+        # Stream through the graph node by node
+        # This allows us to check for checkpoints after each node
+        for event in graph.stream(state):
+            # Update state after each node execution
+            if event:
+                # Extract the state from the event
+                for node_name, node_output in event.items():
+                    # Update our stored state
+                    research_sessions[research_id] = node_output
 
-        # Update the session with the result
-        research_sessions[research_id] = result
+                    # Check if we hit a checkpoint
+                    if node_output.get("status") == "awaiting_human":
+                        checkpoint_id = f"cp_{uuid.uuid4().hex[:12]}"
+                        checkpoint_queue[checkpoint_id] = research_id
+                        node_output["_checkpoint_id"] = checkpoint_id
+                        research_sessions[research_id] = node_output
+                        # Stop execution - wait for human input
+                        return
 
-        # If we hit a checkpoint, create a checkpoint ID
-        if result.get("status") == "awaiting_human":
-            checkpoint_id = f"cp_{uuid.uuid4().hex[:12]}"
-            checkpoint_queue[checkpoint_id] = research_id
-            result["_checkpoint_id"] = checkpoint_id
+        # If we get here, graph completed without checkpoints
+        # Get final state
+        final_state = research_sessions.get(research_id)
+        if final_state and final_state.get("status") != "awaiting_human":
+            # Mark as completed if no error
+            if not final_state.get("error"):
+                final_state["status"] = "completed"
+                research_sessions[research_id] = final_state
 
     except Exception as e:
         state["status"] = "error"
