@@ -13,7 +13,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <style>{`
+        <style dangerouslySetInnerHTML={{__html: `
           * {
             margin: 0;
             padding: 0;
@@ -38,7 +38,7 @@ export default function RootLayout({
             50% { transform: translateX(0); }
             100% { transform: translateX(100%); }
           }
-        `}</style>
+        `}} />
       </head>
       <body>{children}</body>
     </html>
