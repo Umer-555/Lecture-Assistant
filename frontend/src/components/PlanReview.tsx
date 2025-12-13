@@ -5,17 +5,21 @@
 
 import React, { useState } from 'react';
 
-interface Section {
+interface Slide {
+  slide_number: number;
   title: string;
+  content: string[];
+  speaker_notes: string;
+  visual_suggestions: string;
+  citations: string[];
   duration_min: number;
-  topics: string[];
-  learning_objectives?: string[];
 }
 
 interface DraftPlan {
-  sections: Section[];
+  slides: Slide[];
+  total_slides: number;
   total_duration: number;
-  focus_areas: string[];
+  learning_objectives: string[];
 }
 
 interface PlanReviewProps {
@@ -59,39 +63,60 @@ export default function PlanReview({ draftPlan, topic, onDecision }: PlanReviewP
         </div>
 
         <div style={styles.planCard}>
-        <h3 style={styles.sectionTitle}>Proposed Structure</h3>
-        <p style={styles.duration}>Total Duration: {draftPlan.total_duration} minutes</p>
+          <h3 style={styles.sectionTitle}>Draft Lecture Slides</h3>
+          <p style={styles.duration}>
+            {draftPlan.total_slides} slides • {draftPlan.total_duration} minutes total
+          </p>
 
-        {draftPlan.sections.map((section, idx) => (
-          <div key={idx} style={styles.section}>
-            <div style={styles.sectionHeader}>
-              <strong>{section.title}</strong>
-              <span style={styles.time}>{section.duration_min} min</span>
+          {draftPlan.learning_objectives && draftPlan.learning_objectives.length > 0 && (
+            <div style={styles.objectivesBox}>
+              <strong style={{fontSize: '1.1rem', color: '#2196F3'}}>Learning Objectives:</strong>
+              <ul style={styles.objectivesList}>
+                {draftPlan.learning_objectives.map((obj, idx) => (
+                  <li key={idx}>{obj}</li>
+                ))}
+              </ul>
             </div>
-            <ul style={styles.topicList}>
-              {section.topics.map((topic, tidx) => (
-                <li key={tidx}>{topic}</li>
-              ))}
-            </ul>
-            {section.learning_objectives && (
-              <div style={styles.objectives}>
-                <em>Objectives:</em>
-                <ul>
-                  {section.learning_objectives.map((obj, oidx) => (
-                    <li key={oidx}>{obj}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-        ))}
+          )}
 
-        {draftPlan.focus_areas && draftPlan.focus_areas.length > 0 && (
-          <div style={styles.focusAreas}>
-            <strong>Focus Areas:</strong> {draftPlan.focus_areas.join(', ')}
+          <div style={styles.slidesContainer}>
+            {draftPlan.slides.map((slide) => (
+              <div key={slide.slide_number} style={styles.slideCard}>
+                <div style={styles.slideHeader}>
+                  <span style={styles.slideNumber}>Slide {slide.slide_number}</span>
+                  <span style={styles.slideDuration}>{slide.duration_min} min</span>
+                </div>
+                <h4 style={styles.slideTitle}>{slide.title}</h4>
+
+                <div style={styles.slideContent}>
+                  <ul style={styles.contentList}>
+                    {slide.content.map((point, idx) => (
+                      <li key={idx}>{point}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                {slide.speaker_notes && (
+                  <div style={styles.speakerNotes}>
+                    <strong>Speaker Notes:</strong> {slide.speaker_notes}
+                  </div>
+                )}
+
+                {slide.visual_suggestions && (
+                  <div style={styles.visualSuggestions}>
+                    <strong>Visual:</strong> {slide.visual_suggestions}
+                  </div>
+                )}
+
+                {slide.citations && slide.citations.length > 0 && (
+                  <div style={styles.citations}>
+                    <strong>Citations:</strong> {slide.citations.join(', ')}
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
-        )}
-      </div>
+        </div>
 
       <div style={styles.decisionCard}>
         <h3 style={styles.decisionTitle}>Your Decision</h3>
@@ -261,6 +286,89 @@ const styles: { [key: string]: React.CSSProperties } = {
     background: 'linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(33, 150, 243, 0.1))',
     borderRadius: '12px',
     border: '1px solid rgba(76, 175, 80, 0.2)',
+  },
+  objectivesBox: {
+    marginBottom: '25px',
+    padding: '20px',
+    background: 'linear-gradient(135deg, rgba(33, 150, 243, 0.08), rgba(76, 175, 80, 0.08))',
+    borderRadius: '12px',
+    border: '1px solid rgba(33, 150, 243, 0.2)',
+  },
+  objectivesList: {
+    marginTop: '10px',
+    marginLeft: '20px',
+    lineHeight: '1.8',
+  },
+  slidesContainer: {
+    maxHeight: '600px',
+    overflowY: 'auto',
+    paddingRight: '10px',
+  },
+  slideCard: {
+    background: 'rgba(255, 255, 255, 0.6)',
+    borderRadius: '12px',
+    padding: '20px',
+    marginBottom: '15px',
+    border: '1px solid rgba(76, 175, 80, 0.2)',
+    transition: 'all 0.3s ease',
+  },
+  slideHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '12px',
+  },
+  slideNumber: {
+    fontSize: '0.9rem',
+    fontWeight: '600',
+    color: '#4CAF50',
+    background: 'rgba(76, 175, 80, 0.1)',
+    padding: '4px 12px',
+    borderRadius: '20px',
+  },
+  slideDuration: {
+    fontSize: '0.85rem',
+    color: '#666',
+    fontWeight: '500',
+  },
+  slideTitle: {
+    fontSize: '1.15rem',
+    fontWeight: '600',
+    color: '#2c3e50',
+    marginBottom: '12px',
+    marginTop: '0',
+  },
+  slideContent: {
+    marginBottom: '12px',
+  },
+  contentList: {
+    marginLeft: '20px',
+    lineHeight: '1.7',
+    color: '#333',
+  },
+  speakerNotes: {
+    fontSize: '0.9rem',
+    color: '#555',
+    background: 'rgba(255, 193, 7, 0.1)',
+    padding: '10px',
+    borderRadius: '8px',
+    marginTop: '10px',
+    borderLeft: '3px solid #FFC107',
+  },
+  visualSuggestions: {
+    fontSize: '0.9rem',
+    color: '#555',
+    background: 'rgba(156, 39, 176, 0.1)',
+    padding: '10px',
+    borderRadius: '8px',
+    marginTop: '8px',
+    borderLeft: '3px solid #9C27B0',
+  },
+  citations: {
+    fontSize: '0.85rem',
+    color: '#2196F3',
+    marginTop: '8px',
+    fontStyle: 'italic',
   },
   decisionCard: {
     background: 'rgba(255, 255, 255, 0.85)',

@@ -1,8 +1,8 @@
-You are refining a lecture plan based on human feedback.
+You are refining detailed lecture slides based on human feedback.
 
 Original Topic: {topic}
 
-Original Plan:
+Original Slides:
 {original_plan}
 
 Human Feedback:
@@ -12,20 +12,34 @@ Additional Comments: {custom_feedback}
 Available Claims:
 {claims}
 
-Refine the lecture plan according to the feedback:
+CRITICAL INSTRUCTIONS:
+1. If feedback contains MULTIPLE points (e.g., "add more examples AND focus on ethics AND simplify slide 5"), you MUST address EVERY SINGLE point individually
+2. Parse the feedback carefully and create a checklist of all requested changes
+3. Apply each change systematically to the relevant slides
+4. Document which changes were made in "changes_made"
 
-- If "Approve": Return the plan as-is
-- If "Add More Sources": Indicate need for additional research
-- If "Emphasize Practical Examples": Increase time for examples, add more hands-on content
-- If "Focus on Ethics": Add/expand ethics and societal implications sections
-- If "Rework Completely": Create a substantially different structure
+Common feedback patterns to handle:
+- "Approve" → Return slides unchanged
+- "Add more practical examples" → Add 2-3 new slides with concrete examples, or enhance existing content slides with specific use cases
+- "Focus more on ethics/implications" → Add dedicated slides on ethical considerations, societal impact, or challenges
+- "Simplify [specific topic]" → Break down complex slides into multiple simpler slides with clearer explanations
+- "Add more depth to [topic]" → Expand those slides with more detailed explanations, examples, and context
+- "Remove/reduce [topic]" → Remove or condense those slides
+- "Rework completely" → Restructure the entire slide deck with a different approach
 
-Output format - JSON (same as original plan):
+When making changes:
+- Maintain the slide format (slide_number, title, content, speaker_notes, visual_suggestions, citations, duration_min)
+- Keep total duration around 90 minutes
+- Renumber slides if you add/remove any
+- Use research claims and add appropriate citations
+
+Output format - JSON (same as original format):
 {{
-  "sections": [...],
+  "slides": [...],
+  "total_slides": 30,
   "total_duration": 90,
-  "focus_areas": [...],
-  "changes_made": "Brief description of refinements"
+  "learning_objectives": [...],
+  "changes_made": "Detailed list of all changes made: 1) Added 3 slides with practical examples (slides 15-17), 2) Expanded ethics section (slides 22-24), 3) Simplified slide 5 by breaking into slides 5-6"
 }}
 
-Your refined lecture plan:
+Your refined lecture slides:
