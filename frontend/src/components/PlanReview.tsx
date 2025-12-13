@@ -32,6 +32,21 @@ export default function PlanReview({ draftPlan, topic, onDecision }: PlanReviewP
   const [customFeedback, setCustomFeedback] = useState('');
   const [selectedDecision, setSelectedDecision] = useState('');
 
+  // Defensive check: ensure draftPlan has slides
+  if (!draftPlan || !draftPlan.slides || !Array.isArray(draftPlan.slides)) {
+    return (
+      <div style={styles.pageContainer}>
+        <div style={styles.gradientBackground}></div>
+        <div style={styles.container}>
+          <div style={styles.headerCard}>
+            <h2 style={styles.title}>Error Loading Plan</h2>
+            <p style={styles.subtitle}>The draft plan is in an unexpected format. Please try again.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const decisions = [
     { value: 'approve', label: '✓ Approve', color: '#4CAF50' },
     { value: 'emphasize_practical', label: '⚡ Emphasize Practical Examples', color: '#FF9800' },

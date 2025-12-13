@@ -39,6 +39,26 @@ interface BriefDisplayProps {
 }
 
 export default function BriefDisplay({ brief, onDownload, onNewResearch }: BriefDisplayProps) {
+  // Defensive check: ensure brief has slides and references
+  if (!brief || !brief.slides || !Array.isArray(brief.slides) || !brief.references || !Array.isArray(brief.references)) {
+    return (
+      <div style={styles.pageContainer}>
+        <div style={styles.gradientBackground}></div>
+        <div style={styles.container}>
+          <div style={styles.header}>
+            <h1 style={styles.title}>Error Loading Slides</h1>
+            <p style={{color: '#666', marginTop: '20px'}}>The presentation data is in an unexpected format. Please try regenerating.</p>
+            {onNewResearch && (
+              <button onClick={onNewResearch} style={styles.newButton}>
+                ⟴ Start New Research
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const downloadMarkdown = () => {
     const content = brief.markdown_export || formatSlidesAsMarkdown(brief);
     const blob = new Blob([content], { type: 'text/markdown' });

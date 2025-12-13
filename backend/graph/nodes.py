@@ -289,36 +289,40 @@ def synthesis_node(state: ResearchState) -> ResearchState:
             plan_data = json.loads(plan_json)
 
         except json.JSONDecodeError:
-            # Fallback: create basic plan
+            # Fallback: create basic slides
             plan_data = {
-                "sections": [
+                "slides": [
                     {
-                        "title": "Introduction",
-                        "duration_min": 15,
-                        "topics": ["Overview", "Context"],
-                        "learning_objectives": ["Understand the basics"]
+                        "slide_number": 1,
+                        "title": "Introduction to " + state["topic"],
+                        "content": ["Overview of key concepts", "Why this topic matters", "What we'll cover today"],
+                        "speaker_notes": "Start with engaging opening to capture attention",
+                        "visual_suggestions": "Title slide with topic name",
+                        "citations": [],
+                        "duration_min": 3
                     },
                     {
+                        "slide_number": 2,
                         "title": "Core Concepts",
-                        "duration_min": 30,
-                        "topics": ["Key ideas", "Fundamentals"],
-                        "learning_objectives": ["Grasp core principles"]
+                        "content": ["Fundamental principles", "Key terminology", "Basic framework"],
+                        "speaker_notes": "Build foundational understanding",
+                        "visual_suggestions": "Diagram showing main concepts",
+                        "citations": [],
+                        "duration_min": 5
                     },
                     {
-                        "title": "Applications",
-                        "duration_min": 25,
-                        "topics": ["Real-world examples"],
-                        "learning_objectives": ["Apply knowledge"]
-                    },
-                    {
-                        "title": "Future Directions",
-                        "duration_min": 15,
-                        "topics": ["Trends", "Opportunities"],
-                        "learning_objectives": ["Understand future potential"]
+                        "slide_number": 3,
+                        "title": "Summary",
+                        "content": ["Key takeaways", "Further resources", "Questions"],
+                        "speaker_notes": "Wrap up and engage with audience",
+                        "visual_suggestions": "Summary bullet points",
+                        "citations": [],
+                        "duration_min": 2
                     }
                 ],
-                "total_duration": 85,
-                "focus_areas": ["fundamentals", "applications"]
+                "total_slides": 3,
+                "total_duration": 10,
+                "learning_objectives": ["Understand basic concepts of " + state["topic"]]
             }
 
         state["draft_plan"] = plan_data
@@ -333,7 +337,7 @@ def synthesis_node(state: ResearchState) -> ResearchState:
         logger.log_node_execution(
             node_name="synthesis",
             inputs={"num_claims": len(state["extracted_claims"])},
-            output={"num_sections": len(plan_data["sections"])},
+            output={"num_slides": len(plan_data.get("slides", []))},
             prompt_used=prompt,
             model=model_info["model"],
             temperature=model_info["temperature"],
@@ -403,11 +407,20 @@ def refinement_node(state: ResearchState) -> ResearchState:
         except json.JSONDecodeError:
             # Fallback: modify original plan manually based on decision
             refined_plan = state["draft_plan"].copy()
-            if decision == "emphasize_practical":
-                # Find and expand practical sections
-                for section in refined_plan["sections"]:
-                    if "application" in section["title"].lower() or "example" in section["title"].lower():
-                        section["duration_min"] += 10
+            if decision == "emphasize_practical" and "slides" in refined_plan:
+                # Find and expand practical slides by adding an extra example slide
+                example_slide = {
+                    "slide_number": len(refined_plan["slides"]) + 1,
+                    "title": "Practical Example",
+                    "content": ["Real-world application", "Step-by-step demonstration", "Key takeaways"],
+                    "speaker_notes": "Walk through concrete example",
+                    "visual_suggestions": "Diagram or workflow chart",
+                    "citations": [],
+                    "duration_min": 5
+                }
+                refined_plan["slides"].append(example_slide)
+                refined_plan["total_slides"] = len(refined_plan["slides"])
+                refined_plan["total_duration"] = refined_plan.get("total_duration", 90) + 5
 
         state["refined_plan"] = refined_plan
 
@@ -523,25 +536,52 @@ def final_brief_node(state: ResearchState) -> ResearchState:
             brief_data = json.loads(brief_json)
 
         except json.JSONDecodeError:
-            # Fallback: create basic brief
+            # Fallback: create basic presentation format from final_plan
+            slides_from_plan = final_plan.get("slides", [])
+
+            # Add cover slide
+            all_slides = [{
+                "slide_number": 1,
+                "title": f"Lecture: {state['topic']}",
+                "content": [f"Topic: {state['topic']}", "Prepared by: Lecture Assistant", "Date: Today"],
+                "speaker_notes": "",
+                "visual_suggestions": "Title slide",
+                "citations": [],
+                "duration_min": 1
+            }]
+
+            # Add content slides from plan
+            for i, slide in enumerate(slides_from_plan, 2):
+                slide_copy = slide.copy()
+                slide_copy["slide_number"] = i
+                all_slides.append(slide_copy)
+
+            # Add references slide
+            all_slides.append({
+                "slide_number": len(all_slides) + 1,
+                "title": "References",
+                "content": [f"[{i+1}] {c['source_title']}" for i, c in enumerate(verified_claims[:6])],
+                "speaker_notes": "",
+                "visual_suggestions": "Reference list",
+                "citations": [],
+                "duration_min": 1
+            })
+
             brief_data = {
                 "title": f"Lecture: {state['topic']}",
-                "introduction": f"This lecture explores {state['topic']}.",
-                "summary": "Comprehensive overview of key concepts and applications.",
-                "key_findings": [f"{c['text']} [{i+1}]" for i, c in enumerate(verified_claims[:5])],
-                "risks_unknowns": [
-                    "Rapidly evolving field requires continuous updates",
-                    "Limited long-term studies available",
-                    "Practical implementation may vary by context"
-                ],
-                "further_reading": [
+                "author": "Generated by Lecture Assistant",
+                "date": "Today",
+                "slides": all_slides,
+                "references": [
                     {
+                        "number": i+1,
                         "title": claim["source_title"],
                         "url": claim["source_url"],
                         "description": claim["text"][:100]
                     }
-                    for claim in verified_claims[:6]
-                ]
+                    for i, claim in enumerate(verified_claims[:6])
+                ],
+                "total_slides": len(all_slides)
             }
 
         # Add appendix with execution logs
